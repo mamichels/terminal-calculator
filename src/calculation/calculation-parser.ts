@@ -2,15 +2,21 @@ import {Calculation} from './calculation'
 import {Operation} from './operation'
 
 export class CalculationParser {
+
   /**
    * Given a user input string, parse it into a Calculation object.
    * E.g. "1 + 2" => Calculation(Operation.Add, 1, 2)
    * E.g. "1-2" => Calculation(Operation.Subtract, 1, 2)
    *
    * @param {string} calculationString The user input string
+   * @param {string} placeholderValue The value to replace an optional placeholder with
    * @returns {Calculation} The parsed calculation
    */
-  public parse(calculationString: string): Calculation {
+  public parse(calculationString: string, placeholderValue?: string): Calculation {
+    if (placeholderValue) {
+      calculationString = calculationString.replace('%', placeholderValue)
+    }
+
     const [value, operation, otherValue] = this._splitCalculationString(calculationString)
     return {
       operation: this._parseOperation(operation),

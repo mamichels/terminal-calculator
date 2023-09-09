@@ -1,8 +1,9 @@
-import {Args, Command} from '@oclif/core'
+import {Args} from '@oclif/core'
 import {CalculationParser} from '../calculation/calculation-parser'
 import {Calculator} from '../calculation/calculator'
+import StdinCommand from './stdin-command'
 
-export default class Calc extends Command {
+export default class Calc extends StdinCommand {
   static description = 'Runs a given calculation'
 
   static examples = [
@@ -23,9 +24,8 @@ export default class Calc extends Command {
       throw new Error('No calculation provided')
     }
 
-    const calculation = new CalculationParser().parse(calculationString)
-    console.log(calculation)
+    const calculation = new CalculationParser().parse(calculationString, Calc.stdin)
     const result = new Calculator().calculate(calculation)
-    console.log(result)
+    process.stdout.write(`${result}\n`)
   }
 }
